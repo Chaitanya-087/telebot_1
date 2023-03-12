@@ -1,5 +1,6 @@
 .space
+.env
+
 telebot_env
 Spacefile
 __pycache__
-.env
