@@ -1,16 +1,19 @@
 import os
 import telebot
-from scrapper import getAttendance
+from dotenv import load_dotenv
+# from scrapper import getAttendance
 import requests
 
+load_dotenv()
 
 TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN')
 GIPHY_TOKEN = os.getenv('GIPHY_TOKEN')
 
+print(TELEGRAM_TOKEN)
+
 GIFURL = "https://api.giphy.com/v1/gifs/random"
 
 app = telebot.TeleBot(TELEGRAM_TOKEN)
-
 
 def get_gif_id(tag):
   response = requests.get(GIFURL,
@@ -32,19 +35,19 @@ def greet(message):
     caption="bot service")
 
 
-@app.message_handler(commands=['atd'])
-def send_attendance(message):
-  [usr, pwd] = message.text.split(" ")[1:]
-  usr="160119735" + usr
-  pwd="160119735" + pwd
-  result = getAttendance(usr, pwd)
-  print("sending...")
-  if result["success"]:
-    app.send_message(message.chat.id, result["message"])
-  else:
-    app.send_message(message.chat.id,
-                     result["message"],
-                     reply_to_message_id=message.message_id)
+# @app.message_handler(commands=['atd'])
+# def send_attendance(message):
+#   [usr, pwd] = message.text.split(" ")[1:]
+#   usr="160119735" + usr
+#   pwd="160119735" + pwd
+#   result = getAttendance(usr, pwd)
+#   print("sending...")
+#   if result["success"]:
+#     app.send_message(message.chat.id, result["message"])
+#   else:
+#     app.send_message(message.chat.id,
+#                      result["message"],
+#                      reply_to_message_id=message.message_id)
 
 
 @app.message_handler(commands=['gif'])
@@ -71,6 +74,7 @@ def send_file(message):
 
 
 try:
+  print('bot listening...')
   app.polling()
 except KeyboardInterrupt:
   print("bot quiting...")
